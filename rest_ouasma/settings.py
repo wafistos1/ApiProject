@@ -174,3 +174,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 # ACCOUNT_ADAPTER = 'accounts.adapter.UserAccountAdapter'
 # DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+import dj_database_url
+
+DATABASES = {'default': dj_database_url.config()}
