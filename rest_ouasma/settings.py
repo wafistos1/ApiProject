@@ -99,7 +99,7 @@ DATABASES = {
         'NAME': 'p1',
         'USER': 'wafi',
         'PASSWORD': '123',
-        'HOST': '127.0.0.1',
+        'HOST': 'appapiwafi.herokuapp.com',
         'PORT': '5432',
     }
 }
