@@ -1,1 +1,1 @@
-web: gunicorn rest_ouasma.wsgi:application --log-file -
+web: gunicorn rest_ouasma.wsgi
