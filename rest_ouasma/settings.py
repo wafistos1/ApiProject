@@ -99,7 +99,7 @@ DATABASES = {
         'NAME': 'p1',
         'USER': 'wafi',
         'PASSWORD': '123',
-        'HOST': '',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }
