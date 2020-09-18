@@ -14,7 +14,7 @@ SECRET_KEY = 'polvnr)t=bi)4$guts@m)e3+6%@v(03eh)tkhd(u$_b_!2jvt1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['apiouassama.herokuapp.com']
+ALLOWED_HOSTS = ['apiouassama.herokuapp.com', '*']
 
 
 # Application definition
@@ -84,13 +84,22 @@ WSGI_APPLICATION = 'rest_ouasma.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'p1',
+        'USER': 'wafi',
+        'PASSWORD': '123',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
