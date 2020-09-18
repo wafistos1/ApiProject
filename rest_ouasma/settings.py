@@ -17,7 +17,7 @@ SECRET_KEY = 'polvnr)t=bi)4$guts@m)e3+6%@v(03eh)tkhd(u$_b_!2jvt1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['appapiwafi.herokuapp.com', '*']
+ALLOWED_HOSTS = ['appapiwafi.herokuapp.com', '127.0.0.1',]
 
 
 # Application definition
@@ -99,8 +99,8 @@ DATABASES = {
         'NAME': 'p1',
         'USER': 'wafi',
         'PASSWORD': '123',
-        'HOST': 'appapiwafi.herokuapp.com',
-        'PORT': '6122',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -173,5 +173,4 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 # ACCOUNT_ADAPTER = 'accounts.adapter.UserAccountAdapter'
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
