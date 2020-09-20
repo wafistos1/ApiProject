@@ -1,45 +1,6 @@
 from rest_framework import serializers
-from .models import CitiesDelevery, DeleveryEmployee, SalaryDelevery, Orders
-
-
-class DeleverySerializer(serializers.ModelSerializer):
-    """[summary]
-
-    Args:
-        serializers ([type]): [description]
-    """
-    
-    class Meta:
-        
-        model = DeleveryEmployee
-        fields ='__all__'  
-
-
-class CitiesDeleverySerializer(serializers.ModelSerializer):
-    """[summary]
-
-    Args:
-        serializers ([type]): [description]
-    """
-    
-    class Meta:
-        
-        model = CitiesDelevery
-        fields ='__all__'  
-
-
-
-class SalaryDeleverySerializer(serializers.ModelSerializer):
-    """[summary]
-
-    Args:
-        serializers ([type]): [description]
-    """
-    
-    class Meta:
-        
-        model = SalaryDelevery
-        fields ='__all__'  
+from .models import Orders, OrderProduct
+from rest_framework.fields import CurrentUserDefault
 
 
 class OrdersSerializer(serializers.ModelSerializer):
@@ -53,3 +14,29 @@ class OrdersSerializer(serializers.ModelSerializer):
         
         model = Orders
         fields ='__all__'  
+
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    """[summary]
+
+    Args:
+        serializers ([type]): [description]
+    """
+    
+    class Meta:
+        
+        model = OrderProduct
+        fields =('quatity', 'item', 'store') 
+        
+    
+class OrderProductUpdateSerializer(serializers.ModelSerializer):
+    """[summary]
+
+    Args:
+        serializers ([type]): [description]
+    """
+    
+    class Meta:
+        
+        model = OrderProduct
+        fields =('quatity', 'item', )     

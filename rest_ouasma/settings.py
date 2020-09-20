@@ -17,7 +17,8 @@ SECRET_KEY = 'polvnr)t=bi)4$guts@m)e3+6%@v(03eh)tkhd(u$_b_!2jvt1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['appapiwafi.herokuapp.com', '127.0.0.1',]
+# ALLOWED_HOSTS = ['appapiwafi.herokuapp.com', '127.0.0.1',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -42,14 +43,18 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     
+    #Djoser
+    'djoser',
+    
     # Local
     'accounts',
     'store',
+    'shop',
 ]
 SITE_ID = 1
 
 MIDDLEWARE = [
-    # 'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -95,12 +100,8 @@ WSGI_APPLICATION = 'rest_ouasma.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'p1',
-        'USER': 'wafi',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -127,6 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'ar-ea'
 
 TIME_ZONE = 'UTC'
 
@@ -157,9 +159,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-# LOGIN_REDIRECT_URL = 'home'
-# LOGIN_URL = 'account_login'
-
+LOGIN_REDIRECT_URL = '/auth/login'
+# LOGIN_URL = 'account_login' 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -172,9 +173,14 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
 }
 
+# REST_AUTH_SERIALIZERS = {
+#     'LOGIN_SERIALIZER': 'accounts.serializers.LoginSerializer',
+#     # 'TOKEN_SERIALIZER': 'path.to.custom.TokenSerializer',
+    
+# }
 # ACCOUNT_ADAPTER = 'accounts.adapter.UserAccountAdapter'
 # DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-import dj_database_url
+# import dj_database_url
 
-DATABASES = {'default': dj_database_url.config()}
+# DATABASES = {'default': dj_database_url.config()}
