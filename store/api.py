@@ -180,20 +180,4 @@ class updateDeleteItemCartView(APIView):
                 }
             return Response(context)
  
-   
-class DeleteItemCartView(APIView):
-    """Delete item from cart
-
-    Args:
-        APIView ([type]): [description]
-    """
-    pass
-
-
-class UpdateItemCartView(APIView):
-    """Update quantity in cart
-
-    Args:
-        APIView ([type]): [description]
-    """
-    pass
+    
