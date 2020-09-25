@@ -12,7 +12,14 @@ from rest_framework.views import APIView
 from rest_framework import authentication
 
 # Logics
-from .serializers import  OrdersSerializer, OrderProductSerializer, OrderProductUpdateSerializer
+from .serializers import (
+    OrdersSerializer,
+    OrderProductSerializer,
+    OrderProductUpdateSerializer,
+    OrdersAdminSerializer,
+    OrderProductAdminSerializer,
+    )
+
 from .models import Orders, OrderProduct
 from accounts.models import ClientUser
 
@@ -22,45 +29,41 @@ from shop.models import Product, Store
 from accounts.models import ClientUser
 
 
-class productOrdersAllView(APIView):
-    
+class ProductOrdersAdminView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     
     def get(self, request, format=None):
-        client = get_object_or_404(ClientUser, user=request.user)
-        qs = OrderProduct.objects.filter(client=client)
-        orders = OrderProductSerializer(qs,  many=True)
-        message = f'All  {client.user.username.upper()} OrderProducts'
-        
+        qs = OrderProduct.objects.all()
+        orders = OrderProductAdminSerializer(qs,  many=True)
+        message = f'All OrderProducts'
+        count = qs.count()
         context = {
             'Message': message,
+            'Count': f'Count all orders: {count}',
             'item': orders.data,
         }
         return Response(context)
 
 
-class OrdersAllView(APIView):
-    
+class OrdersAdminView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     
     def get(self, request, format=None):
-        client = get_object_or_404(ClientUser, user=request.user)
-        qs = Orders.objects.filter(client=client)
-        orders = OrdersSerializer(qs,  many=True)
-        message = f'All  {client.user.username.upper()} Orders'
+       
+        qs = Orders.objects.all()
+        orders = OrdersAdminSerializer(qs,  many=True)
+        count = qs.count()
+      
+        message = f'All Order'
         
         context = {
             'Message': message,
+            'Count': f'Count all orders: {count}',
             'orders': orders.data
         }
         return Response(context)
-    
-
-class ProductListView(generics.ListAPIView):
-    
-    pass
     
     
 class AddItemCartView(APIView):
@@ -180,4 +183,97 @@ class updateDeleteItemCartView(APIView):
                 }
             return Response(context)
  
+ 
+class OrderCreateUserView(APIView):
+    """Post: Create Order by user
+       Get: Get All orders of user      
+    Args:
+        APIView ([type]): [description]
+    """
+    def get_client(self):
+        try:
+            return Orders.objects.get(user=self.request.user)
+        except Orders.DoesNotExist:
+            raise Http404
+        
+    def post(self, request):
+        serializer = OrdersSerializer(data=request.data)
+        if serializer.is_valid():
+            kitten_kwargs = serializer.validated_data
+            # if kitten_kwargs['shipping_address'] is None:
+            #     kitten_kwargs['shipping_address'] = 
+            order = Orders(**kitten_kwargs)
+            client = get_list_or_404(ClientUser, user=request.user)
+            order.client = client[0]
+            items = OrderProduct.objects.filter(client=client[0], selected=False)
+            print(items)
+            order.save()
+            for item in items:
+                order.items.add(item)
+                item.selected = True
+                item.quatity -= 1
+                item.save()
+            message = f'Order: {order.pk} add By {order.client.user.username.upper()}'
+            context = {
+                'message': 'Order add successfully ',
+                'Add Item': message,
+                'Status': 'status.HTTP_200',
+                }
+            return Response(context)
+        else:
+            context = {
+                'Alert': 'Order add error ',
+                'message': serializer.errors,
+                'Status': 'status.HTTP_400 Bad Request',
+                }
+            return Response(context)
+            
+            
+    def get(self, request):
+        client = get_list_or_404(ClientUser, user=request.user)
+        qs = Orders.objects.filter(client=client[0]) 
+        products = OrdersSerializer(qs, many=True)
+        
+        message = f'All  {client[0].user.username.upper()} Orders'
+        
+        context = {
+            'Message': message,
+            'Orders': products.data,
+            'Status': 'status.HTTP_200 ',
+        }
+        return Response(context)
+
+
+class UpdateOrderUserView(APIView):
+    """PUT: update oders by user
+       DELETE: delete order By User      
+    Args:
+        APIView ([type]): [description]
+    """
     
+    def get_object(self, id):
+        try:
+            return Orders.objects.get(id=id)
+        except Orders.DoesNotExist:
+            raise Http404
+    
+    def delete(self, request, id, format=None):
+        client = get_list_or_404(ClientUser, user=request.user)
+        delete_Order = self.get_object(id)
+
+        if delete_Order.client == client[0]:
+            delete_Order.delete()
+            context = {
+                'Message': 'item Deleted successfully ',
+                
+                'Status': 'status.HTTP_204_NO_CONTENT',
+                }
+            return Response(context)
+        else:
+            context = {
+                'Alert': 'Request Unauthorized ',
+                'Status': 'status.HTTP_401 Unauthorized',
+                }
+            return Response(context)
+
+

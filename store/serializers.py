@@ -13,7 +13,7 @@ class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         
         model = Orders
-        fields ='__all__'  
+        fields = ('ref_code',  'shipping_address', 'being_deliverd')  
 
 
 class OrderProductSerializer(serializers.ModelSerializer):
@@ -39,4 +39,29 @@ class OrderProductUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         
         model = OrderProduct
-        fields =('quatity', 'item', )     
+        fields =('quatity', 'item', )
+        
+class OrderProductAdminSerializer(serializers.ModelSerializer):
+    """[summary]
+
+    Args:
+        serializers ([type]): [description]
+    """
+    
+    class Meta:
+        
+        model = OrderProduct
+        fields = '__all__'
+
+class OrdersAdminSerializer(serializers.ModelSerializer):
+    """[summary]
+
+    Args:
+        serializers ([type]): [description]
+    """
+    
+    class Meta:
+        
+        model = Orders
+        fields = '__all__'
+

@@ -51,7 +51,7 @@ class Orders(models.Model):
         ordering = ['start_date']
     
     def __str__(self):
-        return f'[{self.client.user.username.upper()}-->{self.shipping_address.location}] Delevered By {self.delevery_man.user.username.upper()}'
+        return str(self.id)
      
     def get_total(self):
         pass
