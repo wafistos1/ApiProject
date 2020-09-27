@@ -38,7 +38,7 @@ class Orders(models.Model):
     client = models.ForeignKey(ClientUser, on_delete=models.CASCADE, related_name='Client_order')
     delevery_man = models.ForeignKey(DeliveryMan, on_delete=models.SET_NULL, null=True)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
-    items = models.ManyToManyField(OrderProduct)
+    items = models.ManyToManyField(OrderProduct, related_name='items')
     start_date = models.DateTimeField(auto_now_add=True)
     shipping_address = models.ForeignKey(Address, related_name='shipping_address', on_delete=models.SET_NULL, null=True)
     # Orders status

@@ -29,7 +29,7 @@ class Store(models.Model):
     name = models.CharField(max_length=200)
     quantity = models.IntegerField(null=True)
     quantity_min = models.IntegerField(null=True)
-    product = models.ManyToManyField(Product) 
+    product = models.ManyToManyField(Product, related_name='product') 
     
     def get_quatity_min_alert(self):
         pass
