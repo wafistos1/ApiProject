@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from accounts.models import DeliveryMan, Address, ClientUser, SalaryCustomUser, EmployeeUser, CustomEmployee
 
 
+
 admin.site.register(DeliveryMan) 
 admin.site.register(Address) 
 admin.site.register(ClientUser)  

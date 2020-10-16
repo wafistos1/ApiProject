@@ -15,7 +15,6 @@ CATEGORY = (
 class Product(models.Model):
     name = models.CharField(max_length=200)
     category = models.CharField(max_length=200, choices=CATEGORY, default='other')
-    
     price_wholesale = models.IntegerField()
     price_detail = models.IntegerField()
 
@@ -24,6 +23,7 @@ class Product(models.Model):
     
     def get_name_product(self):
         return Product.objects.all().first().self.name
+
 
 class Store(models.Model):
     name = models.CharField(max_length=200)
@@ -35,7 +35,7 @@ class Store(models.Model):
         pass
     
     def __str__(self):
-        return f'{self.name}: --->{self.product.name}'  
+        return f'{self.name}' 
 
 
 

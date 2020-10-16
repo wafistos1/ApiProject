@@ -55,9 +55,7 @@ class OrdersAdminView(APIView):
         qs = Orders.objects.all()
         orders = OrdersAdminSerializer(qs,  many=True)
         count = qs.count()
-      
         message = f'All Order'
-        
         context = {
             'Message': message,
             'Count': f'Count all orders: {count}',
@@ -105,9 +103,7 @@ class AddItemCartView(APIView):
         client = get_list_or_404(ClientUser, user=request.user)
         qs = OrderProduct.objects.filter(client=client[0]) 
         products = OrderProductSerializer(qs, many=True)
-        
         message = f'All  {client[0].user.username.upper()} OrdersProducts'
-        
         context = {
             'Message': message,
             'items': products.data,

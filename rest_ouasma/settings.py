@@ -17,8 +17,8 @@ SECRET_KEY = 'polvnr)t=bi)4$guts@m)e3+6%@v(03eh)tkhd(u$_b_!2jvt1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['appapiwafi.herokuapp.com', '127.0.0.1',]
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['appapiwafi.herokuapp.com', '127.0.0.1',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     #Djoser
     'djoser',
     
-    # Local
+    # Third
     'accounts',
     'store',
     'shop',
+    'import_export',
+    'dashboard',
 ]
 SITE_ID = 1
 
@@ -181,6 +183,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 # ACCOUNT_ADAPTER = 'accounts.adapter.UserAccountAdapter'
 # DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-import dj_database_url
+# import dj_database_url
 
-DATABASES = {'default': dj_database_url.config()}
+# DATABASES = {'default': dj_database_url.config()}

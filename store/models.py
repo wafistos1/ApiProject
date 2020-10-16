@@ -7,16 +7,18 @@ class OrderProduct(models.Model):
     client = models.ForeignKey(ClientUser, on_delete=models.CASCADE, related_name='client_order')
     item = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='client_product')
     quatity = models.IntegerField(default=1)
-    selected = models.BooleanField(default=False, null=True, blank=True)
+    order_status = models.BooleanField(default=False, null=True, blank=True)
     store = models.ForeignKey(Store, on_delete=models.SET_NULL, null=True)
-    
-    
     
     def __str__(self):
         return f'Id: {self.pk}: [Quantity:{self.quatity} item: {self.item.name}] Owner: {self.client.user.username.upper()}'
     
-    def get_total_price(self):
-        pass
+    # def get_total_price(self):
+    #     items = self.item.objects.all()
+    #     summe = 0
+    #     for item in items:
+    #         summe += item.price
+    #     return summe
     
     def get_total_item(self):
         pass
@@ -53,5 +55,9 @@ class Orders(models.Model):
     def __str__(self):
         return str(self.id)
      
-    def get_total(self):
-        pass
+    # def get_total(self):
+    #     somme = 0
+    #     ordersProduct = OrderProduct.objects.filter(client=self.client)
+    #     for order in ordersProduct:
+    #         somme += order.get_total_price()
+    #     return somme

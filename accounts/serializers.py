@@ -1,20 +1,48 @@
 
 from rest_framework import serializers
 from rest_framework import exceptions
+from django.forms.fields import RegexField
+from django.core.validators import RegexValidator
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from .models import DeliveryMan, ClientUser, Address, SalaryCustomUser, EmployeeUser
 from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_auth.registration.serializers import RegisterSerializer
+from django.utils.translation import gettext_lazy as _
+import re
 
+
+
+
+expression = r"^0[0-9]([ .-]?[0-9]{2}){4}$"
+CITY = (
+    ('City1', 'City1'),
+    ('City2', 'City2'),
+    ('City3', 'City3'),
+    ('City4', 'City4'),
+)
+
+REGION = (
+    ('Region1', 'Region1'),
+    ('Region2', 'Region2'),
+    ('Region3', 'Region3'),
+    ('Region4', 'Region4'),
+)
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields ='__all__'  
+        
 
 class CustomRegisterSerializer(RegisterSerializer):
+    # phone = RegexField(expression, max_length=None, min_length=None, allow_blank=False)
     phone = serializers.CharField(required=False,max_length=200,)
     facebook_name = serializers.CharField(required=False,max_length=200,)
-    facebook_id = serializers.IntegerField(required=False) 
-    city = serializers.CharField(required=False,max_length=200,)
-    region = serializers.CharField(required=False,max_length=200,)
+    facebook_id = serializers.IntegerField(required=False)
+    city = serializers.ChoiceField(choices=CITY)
+    region = serializers.ChoiceField(choices=REGION)
     location = serializers.CharField(required=False,max_length=200,)
     
     def get_cleaned_data(self):
@@ -27,20 +55,31 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['location'] = self.validated_data.get('location', '')
         return data_dict
     
+    def validate_phone(self, phone):
+        phone = get_adapter().clean_email(phone)
+        if re.search(expression, phone) is None:
+                raise serializers.ValidationError(
+                    _("The phone number is not valid."))
+        return phone
+    
     def custom_signup(self, request, user):
         # connect the data with the user
+        address = Address(
+           city=self.validated_data['city'],
+           region=self.validated_data['region'],
+           location=self.validated_data['location'],
+           )
+        address.save() 
         profile = ClientUser(
             user=user,
             phone=self.validated_data['phone'],
             facebook_name=self.validated_data['facebook_name'],
             facebook_id=self.validated_data['facebook_id'],
-            city=self.validated_data['city'],
-            region=self.validated_data['region'],
-            location=self.validated_data['location'],
+            address=address,
         )
         profile.save()
         return profile
-    
+
 
     
     
@@ -62,10 +101,7 @@ class SalaryCustomUserSerializer(serializers.ModelSerializer):
         fields ='__all__'  
 
    
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields ='__all__'  
+
 
 # class LoginSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=True, allow_blank=False)

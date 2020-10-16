@@ -99,7 +99,7 @@ class SearchWithFilterAdminView(APIView):
         pass
 
 
-class SendProductToStroeView(APIView): # تحول بظاعة
+class SendProductToStoreView(APIView): # تحول بظاعة
     pass
 
 

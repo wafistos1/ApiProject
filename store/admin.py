@@ -1,9 +1,16 @@
 from django.contrib import admin
 from .models import Orders, OrderProduct
 from accounts.models import ClientUser
+from import_export.admin import ImportExportModelAdmin, ExportMixin
+from import_export import resources, fields
+from import_export.widgets import ForeignKeyWidget
+
+# @admin.register(Orders)
+# class ViewAdmin(ImportExportModelAdmin):
+#     pass
 
 
-class OrdersAdmin(admin.ModelAdmin):
+class OrdersAdmin(ExportMixin, admin.ModelAdmin):
     list_display = (
         'pk',
         'client',
@@ -48,19 +55,21 @@ class OrdersAdmin(admin.ModelAdmin):
         except:
             pass
         return client.facebook_id
+
     
-class OrdersProductAdmin(admin.ModelAdmin):
+class OrdersProductAdmin(ExportMixin, admin.ModelAdmin):
     list_display = (
         'client',
         'item',
         'quatity',
-        'selected',
+        'order_status',
         'store',
         )
-    list_display_links = ('client', 'item', 'store')
-    list_filter = ('client', 'item', 'store')
+    list_display_links = ('client', 'item', 'store', 'order_status')
+    list_filter = ('client', 'item', 'store', 'order_status')
     # search_fields = ['client', 'item', 'store']
-    
-    
-admin.site.register(Orders, OrdersAdmin)
+
+
 admin.site.register(OrderProduct, OrdersProductAdmin)
+
+admin.site.register(Orders, OrdersAdmin)
