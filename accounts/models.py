@@ -34,7 +34,7 @@ class Address(models.Model):
   
 class CustomEmployee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Custom_employee')
-    phone = models.IntegerField(blank=True, null=True, validators=[validate_even])
+    phone = models.IntegerField(blank=True, null=True)
     picture = models.ImageField(default='default.jpg', upload_to='picture/employee')
     # add coordonee de l'utilisateur
     
