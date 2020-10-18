@@ -8,25 +8,25 @@ from django.conf import settings
 
 User = get_user_model()
 
-CITY = (
-    ('City1', 'City1'),
-    ('City2', 'City2'),
-    ('City3', 'City3'),
-    ('City4', 'City4'),
-)
+class City(models.Model):
+    name = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return f'{self.name}'
+    
 
-REGION = (
-    ('Region1', 'Region1'),
-    ('Region2', 'Region2'),
-    ('Region3', 'Region3'),
-    ('Region4', 'Region4'),
-)
+class Region(models.Model):
+    name = models.CharField(max_length=200)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.name} - {self.city.name}'
 
 
 class Address(models.Model):
-    city =models.CharField(max_length=200, choices=CITY, default='City1')
-    region =models.CharField(max_length=200, choices=REGION, default='Region1')
-    location =models.CharField(max_length=200)
+    # city =models.CharField(max_length=200, choices=CITY, default='City1')
+    region =models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
+    location =models.CharField(max_length=200, null=True, blank=True)
     
     def __str__(self):
         return self.location
@@ -57,6 +57,8 @@ class ClientUser(models.Model):
     facebook_name = models.CharField(max_length=200, blank=True, null=True)
     facebook_id = models.IntegerField(unique=True)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, related_name='client_address', blank=True, null=True)
+    # picture_client = models.ImageField(default='default_client.jpg', upload_to='picture/client')
+    # logetitutde et largetude du client
     
     def __str__(self):
         return self.user.username

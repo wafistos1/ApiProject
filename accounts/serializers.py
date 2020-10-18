@@ -10,25 +10,13 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_auth.registration.serializers import RegisterSerializer
 from django.utils.translation import gettext_lazy as _
+from accounts.models import Region, City
 import re
 
 
 
 
-expression = r"^0[0-9]([ .-]?[0-9]{2}){4}$"
-CITY = (
-    ('City1', 'City1'),
-    ('City2', 'City2'),
-    ('City3', 'City3'),
-    ('City4', 'City4'),
-)
-
-REGION = (
-    ('Region1', 'Region1'),
-    ('Region2', 'Region2'),
-    ('Region3', 'Region3'),
-    ('Region4', 'Region4'),
-)
+expression = r"^09([ .-]?[0-9]{2}){4}$"
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,9 +28,11 @@ class CustomRegisterSerializer(RegisterSerializer):
     # phone = RegexField(expression, max_length=None, min_length=None, allow_blank=False)
     phone = serializers.CharField(required=False,max_length=200,)
     facebook_name = serializers.CharField(required=False,max_length=200,)
+    first_name = serializers.CharField(required=True, write_only=True)
+    last_name = serializers.CharField(required=True, write_only=True)
     facebook_id = serializers.IntegerField(required=False)
-    city = serializers.ChoiceField(choices=CITY)
-    region = serializers.ChoiceField(choices=REGION)
+    # city = serializers.ChoiceField(choices=CITY)
+    region = serializers.CharField(required=False,max_length=200,)
     location = serializers.CharField(required=False,max_length=200,)
     
     def get_cleaned_data(self):
@@ -50,9 +40,11 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['phone'] = self.validated_data.get('phone', '')
         data_dict['facebook_name'] = self.validated_data.get('facebook_name', '')
         data_dict['facebook_id'] = self.validated_data.get('facebook_id', '')
-        data_dict['city'] = self.validated_data.get('city', '')
+        # data_dict['city'] = self.validated_data.get('city', '')
         data_dict['region'] = self.validated_data.get('region', '')
         data_dict['location'] = self.validated_data.get('location', '')
+        data_dict['first_name'] =  self.validated_data.get('first_name', '')
+        data_dict['last_name'] = self.validated_data.get('last_name', '')
         return data_dict
     
     def validate_phone(self, phone):
@@ -64,10 +56,12 @@ class CustomRegisterSerializer(RegisterSerializer):
     
     def custom_signup(self, request, user):
         # connect the data with the user
+        region = Region.objects.filter(id=self.validated_data['region']).first()
+        location = self.validated_data['location']
         address = Address(
-           city=self.validated_data['city'],
-           region=self.validated_data['region'],
-           location=self.validated_data['location'],
+        #    city=self.validated_data['city'],
+           region=region,
+           location=location,
            )
         address.save() 
         profile = ClientUser(

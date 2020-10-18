@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Orders, OrderProduct
 from accounts.models import ClientUser
-from import_export.admin import ImportExportModelAdmin, ExportMixin
+from import_export.admin import ImportExportModelAdmin, ExportMixin, ImportMixin
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
 
@@ -10,7 +10,7 @@ from import_export.widgets import ForeignKeyWidget
 #     pass
 
 
-class OrdersAdmin(ExportMixin, admin.ModelAdmin):
+class OrdersAdmin(ImportMixin, admin.ModelAdmin):
     list_display = (
         'pk',
         'client',
