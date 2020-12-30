@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 # from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.core.validators import RegexValidator
 
 User = get_user_model()
 
@@ -26,7 +27,7 @@ class Region(models.Model):
 class Address(models.Model):
     # city =models.CharField(max_length=200, choices=CITY, default='City1')
     region =models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
-    location =models.CharField(max_length=200, null=True, blank=True)
+    location =models.URLField(max_length=200, null=True, blank=True)
     
     def __str__(self):
         return self.location
@@ -37,6 +38,9 @@ class CustomEmployee(models.Model):
     phone = models.IntegerField(blank=True, null=True)
     picture = models.ImageField(default='default.jpg', upload_to='picture/employee')
     # add coordonee de l'utilisateur
+    
+    # class Meta:
+    #     abstract = True
     
     def __str__(self):
         return self.user.username
@@ -55,7 +59,13 @@ class ClientUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="client")
     phone = models.CharField(max_length=200, blank=True, null=True)
     facebook_name = models.CharField(max_length=200, blank=True, null=True)
-    facebook_id = models.IntegerField(unique=True)
+    facebook_id = models.IntegerField(unique=True, validators=[
+        RegexValidator(
+            regex='^([0-9]{16})$',
+            message='FaceBook id must be 16 digit',
+            code='invalid_facebook_Id'
+        ),
+    ])
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, related_name='client_address', blank=True, null=True)
     # picture_client = models.ImageField(default='default_client.jpg', upload_to='picture/client')
     # logetitutde et largetude du client

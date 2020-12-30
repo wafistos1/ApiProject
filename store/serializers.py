@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Orders, OrderProduct
 from rest_framework.fields import CurrentUserDefault
+from accounts.serializers import AddressSerializer
 
 
 class OrdersSerializer(serializers.ModelSerializer):
@@ -9,11 +10,10 @@ class OrdersSerializer(serializers.ModelSerializer):
     Args:
         serializers ([type]): [description]
     """
-    
     class Meta:
         
         model = Orders
-        fields = ('ref_code',  'shipping_address', 'being_deliverd')  
+        fields = ('ref_code', 'being_deliverd')  
 
 
 class OrderProductSerializer(serializers.ModelSerializer):

@@ -21,7 +21,7 @@ from .serializers import (
     )
 
 from .models import Orders, OrderProduct
-from accounts.models import ClientUser
+from accounts.models import ClientUser, Address
 
 # Logics
 from shop.serializers import  ProductSerializer, StoreSerializer
@@ -65,20 +65,20 @@ class OrdersAdminView(APIView):
     
     
 class AddItemCartView(APIView):
-    """ Post :Add item in cart
-        Get  :List item in cart
+    """ Post :Add item in cart by user
+        Get  :List item in cart by user
 
     Args:
         APIView ([type]): [description]
     """
     serializer_class = OrderProductSerializer
     
-    
     def post(self, request ):
         serializer = OrderProductSerializer(data=request.data)
         if serializer.is_valid():
             # name = serializer.data.get('name')
             client = get_list_or_404(ClientUser, user=request.user)
+            
             kitten_kwargs = serializer.validated_data
             orderProduct = OrderProduct(**kitten_kwargs)
             orderProduct.client = client[0]
@@ -92,7 +92,7 @@ class AddItemCartView(APIView):
             return Response(context)
         else:
             context = {
-                'Alert': 'item add error ',
+                'Alert': 'item add errors ',
                 'message': serializer.errors,
                 'Status': 'status.HTTP_400 Bad Request',
                 }
@@ -113,14 +113,15 @@ class AddItemCartView(APIView):
         
 
 class updateDeleteItemCartView(APIView):
-    """ Put: update item in cart
-        Delete: delete item in cart
+    """ Put: update item in cart by user
+        Delete: delete item in cart by user
 
     Args:
         APIView ([type]): [description]
     """
     
     serializer_class = OrderProductSerializer
+    
     def get_object(self, pk):
         try:
             return OrderProduct.objects.get(pk=pk)
@@ -196,19 +197,21 @@ class OrderCreateUserView(APIView):
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
             kitten_kwargs = serializer.validated_data
-            # if kitten_kwargs['shipping_address'] is None:
-            #     kitten_kwargs['shipping_address'] = 
             order = Orders(**kitten_kwargs)
             client = get_list_or_404(ClientUser, user=request.user)
             order.client = client[0]
-            items = OrderProduct.objects.filter(client=client[0], selected=False)
-            print(items)
+            items = OrderProduct.objects.filter(client=client[0])
+            
             order.save()
             for item in items:
                 order.items.add(item)
-                item.selected = True
-                item.quatity -= 1
+                item.quatity -= 1 # TODO: ENLEVER LA QUANTITE REAL DU STORE
                 item.save()
+            print(kitten_kwargs)
+            # id_adresse = kitten_kwargs['shipping_address'][0]    
+            # address = Address.objects.filter(id=).first()
+            # order.shipping_address = address
+            order.save()
             message = f'Order: {order.pk} add By {order.client.user.username.upper()}'
             context = {
                 'message': 'Order add successfully ',

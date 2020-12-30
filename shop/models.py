@@ -27,7 +27,7 @@ class Product(models.Model):
     
 
     def __str__(self):
-        return f'{self.name}:--> {self.quantity}'
+        return f'{self.name}:--> {self.quantity}:Categories--{self.category}'
     
     def get_name_product(self):
         return Product.objects.all().first().self.name

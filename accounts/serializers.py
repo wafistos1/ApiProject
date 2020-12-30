@@ -17,6 +17,7 @@ import re
 
 
 expression = r"^09([ .-]?[0-9]{2}){4}$"
+expression2 = r"^09([ .-]?[0-9]{2}){2}([ .-]?[0-9]{3})$"
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,18 +32,12 @@ class CustomRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField(required=True, write_only=True)
     last_name = serializers.CharField(required=True, write_only=True)
     facebook_id = serializers.IntegerField(required=False)
-    # city = serializers.ChoiceField(choices=CITY)
-    region = serializers.CharField(required=False,max_length=200,)
-    location = serializers.CharField(required=False,max_length=200,)
     
     def get_cleaned_data(self):
         data_dict = super().get_cleaned_data()
         data_dict['phone'] = self.validated_data.get('phone', '')
         data_dict['facebook_name'] = self.validated_data.get('facebook_name', '')
         data_dict['facebook_id'] = self.validated_data.get('facebook_id', '')
-        # data_dict['city'] = self.validated_data.get('city', '')
-        data_dict['region'] = self.validated_data.get('region', '')
-        data_dict['location'] = self.validated_data.get('location', '')
         data_dict['first_name'] =  self.validated_data.get('first_name', '')
         data_dict['last_name'] = self.validated_data.get('last_name', '')
         return data_dict
