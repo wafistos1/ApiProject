@@ -30,7 +30,7 @@ class Address(models.Model):
     location =models.URLField(max_length=200, null=True, blank=True)
     
     def __str__(self):
-        return self.region
+        return f'{self.region.name}- {self.region.city}' 
 
   
 class CustomEmployee(models.Model):
