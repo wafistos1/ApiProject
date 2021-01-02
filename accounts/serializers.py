@@ -56,10 +56,11 @@ class CustomRegisterSerializer(RegisterSerializer):
     def validate_facebook_id(self, phone):
         facebook_id = get_adapter().clean_email(phone)
         clients = ClientUser.objects.all()
-        for clients in clients:
-            if facebook_id == clients.facebook_id:
-                raise serializers.ValidationError(
-                    _("معرف الفيسبوك غير صالح(ID)"))
+        if clients.exists():
+            for clients in clients:
+                if facebook_id == clients.facebook_id:
+                    raise serializers.ValidationError(
+                        _("معرف الفيسبوك غير صالح(ID)"))
         return facebook_id
     
     def custom_signup(self, request, user):
