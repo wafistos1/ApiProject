@@ -40,19 +40,34 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['facebook_id'] = self.validated_data.get('facebook_id', '')
         data_dict['first_name'] =  self.validated_data.get('first_name', '')
         data_dict['last_name'] = self.validated_data.get('last_name', '')
+        data_dict['region'] = self.validated_data.get('region', '')
+        data_dict['location'] = self.validated_data.get('location', '')
+        # print('region' ,self.validated_data['region'])
+        
         return data_dict
     
     def validate_phone(self, phone):
         phone = get_adapter().clean_email(phone)
         if re.search(expression, phone) is None:
                 raise serializers.ValidationError(
-                    _("The phone number is not valid."))
+                    _("رقم الهاتف غير صالح"))
         return phone
+    
+    def validate_facebook_id(self, phone):
+        facebook_id = get_adapter().clean_email(phone)
+        clients = ClientUser.objects.all()
+        for clients in clients:
+            if facebook_id == clients.facebook_id:
+                raise serializers.ValidationError(
+                    _("معرف الفيسبوك غير صالح(ID)"))
+        return facebook_id
     
     def custom_signup(self, request, user):
         # connect the data with the user
-        region = Region.objects.filter(id=self.validated_data['region']).first()
-        location = self.validated_data['location']
+        # print(self.validated_data['region'])
+        region_id = request.POST.get('region')
+        region = Region.objects.get(id=region_id) 
+        location = request.POST.get('location')
         address = Address(
         #    city=self.validated_data['city'],
            region=region,
