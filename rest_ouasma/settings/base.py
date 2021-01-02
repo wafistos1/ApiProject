@@ -169,7 +169,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 # AUTH_USER_MODEL = "accounts.CustomUser" 
 # ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.EmployeeFrom'
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
