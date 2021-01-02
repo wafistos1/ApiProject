@@ -59,7 +59,7 @@ class ClientUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="client")
     phone = models.CharField(max_length=200, blank=True, null=True)
     facebook_name = models.CharField(max_length=200, blank=True, null=True)
-    facebook_id = models.IntegerField(unique=True, validators=[
+    facebook_id = models.BigIntegerField(unique=True, validators=[
         RegexValidator(
             regex='^([0-9]{16})$',
             message='FaceBook id must be 16 digit',
