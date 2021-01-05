@@ -27,7 +27,16 @@ from accounts.models import ClientUser, Address
 from shop.serializers import  ProductSerializer, StoreSerializer
 from shop.models import Product, Store
 from accounts.models import ClientUser
+import random
+import string
 
+def create_ref_for_orders(check=False):
+    letters = string.ascii_lowercase
+    
+    result_str = ''.join(random.choice(letters) for i in range(6))
+    print("Random string of length", 6, "is:", result_str)
+    return result_str
+    
 
 class ProductOrdersAdminView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
@@ -211,6 +220,7 @@ class OrderCreateUserView(APIView):
             # id_adresse = kitten_kwargs['shipping_address'][0]    
             # address = Address.objects.filter(id=).first()
             # order.shipping_address = address
+            order.ref_code = create_ref_for_orders()
             order.save()
             message = f'Order: {order.pk} add By {order.client.user.username.upper()}'
             context = {

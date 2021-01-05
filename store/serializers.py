@@ -13,7 +13,7 @@ class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         
         model = Orders
-        fields = ('ref_code', 'being_deliverd')  
+        fields = ( 'being_deliverd',)  
 
 
 class OrderProductSerializer(serializers.ModelSerializer):

@@ -12,9 +12,10 @@ class ProductsAdmin(admin.ModelAdmin):
         'quantity',
         'delivery_company',
         'store_item',
+        'details',
         )
-    list_display_links = ('name', 'category' ,'quantity', 'store_item')
-    list_filter = ('name', 'category', 'price_wholesale', 'price_detail')
+    list_display_links = ('name', 'category' ,'quantity', 'store_item', 'delivery_company')
+    list_filter = ('name', 'category', 'price_wholesale', 'price_detail', 'delivery_company')
     # search_fields = ['client', 'delevery_man', 'received', 'ref_code']
     def store_item(self, obj):
         return '\n'.join([a.name for a in obj.store.all()])
