@@ -59,6 +59,7 @@ class OrdersAdmin(ImportMixin, admin.ModelAdmin):
     # def Order_company_delivery(self, request):
     #     client = ClientUser.objects.get(user=request.client.user)
     #     return client.phone
+    # sdf0294Aousama
 
     
 class OrdersProductAdmin(ExportMixin, admin.ModelAdmin):
