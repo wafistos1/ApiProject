@@ -55,6 +55,10 @@ class OrdersAdmin(ImportMixin, admin.ModelAdmin):
         except:
             pass
         return client.facebook_id
+    
+    # def Order_company_delivery(self, request):
+    #     client = ClientUser.objects.get(user=request.client.user)
+    #     return client.phone
 
     
 class OrdersProductAdmin(ExportMixin, admin.ModelAdmin):
@@ -68,6 +72,7 @@ class OrdersProductAdmin(ExportMixin, admin.ModelAdmin):
     list_display_links = ('client', 'item', 'store', 'order_status')
     list_filter = ('client', 'item', 'store', 'order_status')
     # search_fields = ['client', 'item', 'store']
+    
 
 
 admin.site.register(OrderProduct, OrdersProductAdmin)

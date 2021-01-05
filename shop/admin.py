@@ -10,7 +10,7 @@ class ProductsAdmin(admin.ModelAdmin):
         'price_wholesale',
         'price_detail',
         'quantity',
-        'quantity_min',
+        'delivery_company',
         'store_item',
         )
     list_display_links = ('name', 'category' ,'quantity', 'store_item')
